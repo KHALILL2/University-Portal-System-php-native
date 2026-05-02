@@ -50,12 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="auth-wrapper">
         <div class="auth-card">
-            <div class="logo-block">
-                <div class="logo-icon">UP</div>
-                <h1>Welcome Back</h1>
-                <p>Sign in to your University Portal account</p>
+            <div class="logo-block" style="text-align: center; margin-bottom: 30px;">
+                <img src="<?php echo BASE_URL; ?>/assets/images/IT_logo.png" alt="BATU IT Department" style="height: 80px; margin-bottom: 15px;">
+                <h1 style="font-size: 1.8rem; margin-bottom: 5px;">BATU | IT Portal</h1>
+                <p style="color: #666;">Sign in to access courses & news</p>
             </div>
-
             <?php if ($error): ?>
                 <div class="alert alert-danger">⚠️ <?php echo User::e($error); ?></div>
             <?php endif; ?>

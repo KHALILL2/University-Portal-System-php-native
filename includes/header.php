@@ -23,8 +23,8 @@ $userName = $_SESSION['user_name'] ?? '';
 <!-- Top Header Bar -->
 <div class="site-header-top">
     <div class="header-inner">
-        <span>📧 info@university.edu</span>
-        <span>University Portal System &copy; <?php echo date('Y'); ?></span>
+        <span>📧 info@batu.edu</span>
+        <span>Balkhash State Technical University &copy; <?php echo date('Y'); ?></span>
     </div>
 </div>
 
@@ -32,9 +32,11 @@ $userName = $_SESSION['user_name'] ?? '';
 <header class="site-header-main">
     <div class="header-inner">
         <a href="<?php echo BASE_URL; ?>/index.php" class="site-logo">
-            <span class="logo-icon">UP</span>
-            <span>UniPortal</span>
+            <img src="<?php echo BASE_URL; ?>/assets/images/BATU_logo.png" alt="BATU Logo" style="height: 35px; margin-right: 10px;">
+            <span>BATU Portal</span>
         </a>
+
+        <a href="https://khalill2.github.io/BATU-Timetable/" target="_blank" class="nav-link" style="margin-left:20px; font-weight:bold; color:var(--primary-color);">📅 BATU Timetable</a>
 
         <button class="nav-toggle" aria-label="Toggle navigation">
             <span></span><span></span><span></span>

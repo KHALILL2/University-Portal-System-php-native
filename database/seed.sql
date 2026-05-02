@@ -7,25 +7,27 @@ INSERT INTO users (name, email, password, role) VALUES
 ('Jane Smith', 'jane@student.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'student');
 
 INSERT INTO departments (name, description) VALUES 
-('Computer Science', 'CS Department offering Software Engineering, Networking, and AI programs.'),
-('Mathematics', 'Department of Applied and Pure Mathematics.'),
-('Physics', 'Department of Physics covering Mechanics, Thermodynamics, and Quantum Physics.');
+('Information Technology', 'Common track for all first and second year IT students.'),
+('Software Development', 'Specialized track focusing on software engineering, programming, and development.'),
+('Network', 'Specialized track focusing on networking, CCNA, and cybersecurity.');
 
 INSERT INTO courses (name, code, description, department_id) VALUES 
-('Web Development II', 'CS402', 'Advanced PHP and MySQL with OOP', 1),
-('Data Structures', 'CS201', 'Trees, Graphs, and Hash Tables', 1),
-('Artificial Intelligence', 'CS501', 'Introduction to AI and Machine Learning', 1),
-('Calculus I', 'MATH101', 'Limits, Derivatives, and Integrals', 2),
-('Linear Algebra', 'MATH201', 'Vectors, Matrices, and Linear Transformations', 2),
-('Classical Mechanics', 'PHY101', 'Newtons Laws and Kinematics', 3);
+('Intro. to Cyber Security', 'IT101', 'Introduction to fundamental concepts of cybersecurity and protection mechanisms.', 1),
+('IT Essentials', 'IT102', 'Comprehensive introduction to computer hardware, software, and networking.', 1),
+('Programming Essentials in Python', 'IT106', 'Introduction to programming concepts using Python.', 1),
+('Advanced Programming in C++', 'SW301', 'Advanced C++ programming concepts including templates, STL, and design patterns.', 2),
+('Mobile Programming II', 'SW402', 'Advanced mobile application development for iOS and Android.', 2),
+('CCNA R&S II', 'NW301', 'Advanced Cisco CCNA Routing & Switching covering routing protocols and VLANs.', 3),
+('Server Administration', 'NW405', 'Windows and Linux server administration, virtualization, and infrastructure management.', 3);
 
 INSERT INTO news (title, content, created_by) VALUES
-('Welcome to the University Portal', 'We are excited to launch the new University Portal System! Students can now browse courses, enroll online, and stay updated with the latest news. Navigate through the portal to explore all features.', 1),
-('Registration Period Open', 'The registration period for the Fall 2026 semester is now open. Please browse available courses and complete your enrollment before the deadline on June 15, 2026.', 1),
-('New AI Course Available', 'We are pleased to announce a new Artificial Intelligence course (CS501) in the Computer Science department. This course covers fundamentals of AI and Machine Learning. Enroll now!', 1);
+('Welcome to BATU Portal', 'Welcome to the new BATU University Portal System! Students can now browse IT, Software Development, and Network courses, enroll online, and stay updated.', 1),
+('Fall 2026 Registration Open', 'The registration period for the Fall 2026 semester is now open. Make sure to check the BATU Timetable to plan your schedule before enrolling.', 1),
+('New CCNA Certification Track', 'The Network department has updated the CCNA R&S IV course to align with the latest industry certifications. Enroll today to secure your spot.', 1);
 
 INSERT INTO enrollments (student_id, course_id) VALUES 
 (2, 1),
 (2, 2),
-(3, 1),
-(3, 4);
+(2, 3),
+(3, 4),
+(3, 5);
