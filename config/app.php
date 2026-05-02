@@ -12,9 +12,10 @@ $baseUrl = rtrim($scriptDir, '/');
 // If the script is inside a subfolder like /config, /views, /views/admin, strip back
 $depth = substr_count(str_replace(ROOT_PATH, '', str_replace('\\', '/', dirname($_SERVER['SCRIPT_FILENAME']))), '/');
 // Simplify: always compute from ROOT_PATH vs DOCUMENT_ROOT
-$docRoot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
+$docRoot = str_replace('\\', '/', rtrim($_SERVER['DOCUMENT_ROOT'], '/\\'));
 $rootPath = str_replace('\\', '/', ROOT_PATH);
-define('BASE_URL', '/' . trim(str_replace($docRoot, '', $rootPath), '/'));
+$baseDir = trim(str_replace($docRoot, '', $rootPath), '/');
+define('BASE_URL', $baseDir ? '/' . $baseDir : '');
 
 require_once ROOT_PATH . '/config/Database.php';
 
