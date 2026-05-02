@@ -8,8 +8,12 @@ A comprehensive, robust, and secure University Portal System built using **Nativ
 
 The University Portal System serves as a centralized platform for both students and administrators. It facilitates the management of university departments, courses, news announcements, and student course enrollments. The application is built without any external PHP frameworks (like Laravel or Symfony), showcasing a deep understanding of core PHP capabilities.
 
-### 🎨 Design
-The UI features a clean, professional "Dark Teal" academic theme inspired by modern university portals. It is fully responsive, ensuring a seamless experience across desktop and mobile devices.
+### 🎨 Design & UI/UX Enhancements
+The UI features a clean, professional "Dark Teal" academic theme inspired by modern university portals. It includes:
+*   **Ultimate Responsiveness:** Flawless viewing across ultra-wide monitors, laptops, tablets, and smartphones using fluid CSS grids and robust media queries.
+*   **Scroll Animations:** Elements such as data cards and tables dynamically slide and fade into view using Javascript's `IntersectionObserver`.
+*   **FontAwesome Icons:** A comprehensive integration of FontAwesome across the navigation, dashboards, and the premium custom footer.
+*   **Custom Footer:** A completely custom 4-column responsive footer linked to external university resources and the legacy BATU Timetable project.
 
 ---
 

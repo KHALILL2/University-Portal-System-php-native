@@ -29,4 +29,33 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // --- Scroll Animations ---
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+            }
+        });
+    }, observerOptions);
+    
+    // Add animation class to cards and elements dynamically
+    document.querySelectorAll('.card, .stat-card, .quick-link, .news-card').forEach(function(el, index) {
+        if (!el.classList.contains('animate-on-scroll')) {
+            el.classList.add('animate-on-scroll');
+            // Stagger animations slightly based on index
+            if (index % 3 === 1) el.classList.add('animate-delay-1');
+            if (index % 3 === 2) el.classList.add('animate-delay-2');
+        }
+    });
+
+    // Start observing all animated elements
+    document.querySelectorAll('.animate-on-scroll').forEach(function(el) {
+        observer.observe(el);
+    });
+
 });
