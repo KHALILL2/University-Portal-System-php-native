@@ -12,9 +12,7 @@ class Enrollment
         $this->db = Database::getInstance()->getConnection();
     }
 
-    /**
-     * Enroll a student in a course. Returns false on duplicate.
-     */
+    // Try to enroll the student. If the DB throws a unique constraint error, it means they're already in it
     public function enroll(int $studentId, int $courseId): bool
     {
         try {
@@ -26,18 +24,14 @@ class Enrollment
         }
     }
 
-    /**
-     * Unenroll a student from a course.
-     */
+    // Remove a student from a course
     public function unenroll(int $studentId, int $courseId): bool
     {
         $stmt = $this->db->prepare("DELETE FROM enrollments WHERE student_id = :sid AND course_id = :cid");
         return $stmt->execute([':sid' => $studentId, ':cid' => $courseId]);
     }
 
-    /**
-     * Get all enrollments for a student with course and department info.
-     */
+    // Get all the classes a student is taking. We join the courses and departments tables to get the actual names.
     public function getByStudent(int $studentId): array
     {
         $stmt = $this->db->prepare("
@@ -52,9 +46,7 @@ class Enrollment
         return $stmt->fetchAll();
     }
 
-    /**
-     * Check if a student is already enrolled in a course.
-     */
+    // Simple boolean check to see if we should show the "Enroll" or "Unenroll" button
     public function isEnrolled(int $studentId, int $courseId): bool
     {
         $stmt = $this->db->prepare("SELECT id FROM enrollments WHERE student_id = :sid AND course_id = :cid LIMIT 1");
@@ -62,18 +54,14 @@ class Enrollment
         return (bool) $stmt->fetchColumn();
     }
 
-    /**
-     * Count total enrollments.
-     */
+    // Count for the admin dashboard stats
     public function count(): int
     {
         $stmt = $this->db->query("SELECT COUNT(id) FROM enrollments");
         return (int) $stmt->fetchColumn();
     }
 
-    /**
-     * Get recent enrollments with student and course names (for admin dashboard).
-     */
+    // Grabs the latest few enrollments to show in the admin dashboard activity feed
     public function getRecent(int $limit = 5): array
     {
         $stmt = $this->db->prepare("

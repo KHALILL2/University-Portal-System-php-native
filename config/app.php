@@ -19,6 +19,14 @@ define('BASE_URL', $baseDir ? '/' . $baseDir : '');
 
 require_once ROOT_PATH . '/config/Database.php';
 
+// Native Autoloader for Classes
+spl_autoload_register(function ($class_name) {
+    $file = ROOT_PATH . '/classes/' . $class_name . '.php';
+    if (file_exists($file)) {
+        require_once $file;
+    }
+});
+
 // Generate a CSRF token if one doesn't exist
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));

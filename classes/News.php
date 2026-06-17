@@ -12,9 +12,7 @@ class News
         $this->db = Database::getInstance()->getConnection();
     }
 
-    /**
-     * Retrieve all news articles with author name, newest first.
-     */
+    // Gets all the news posts and also grabs the author's name so we can show who posted it
     public function getAll(): array
     {
         $stmt = $this->db->query("
@@ -26,9 +24,7 @@ class News
         return $stmt->fetchAll();
     }
 
-    /**
-     * Retrieve a single news article by ID.
-     */
+    // Grab a single news post. Used when editing it.
     public function getById(int $id): ?array
     {
         $stmt = $this->db->prepare("
@@ -42,9 +38,7 @@ class News
         return $row ?: null;
     }
 
-    /**
-     * Create a new news article.
-     */
+    // Post a new announcement
     public function create(string $title, string $content, int $createdBy): bool
     {
         $stmt = $this->db->prepare("INSERT INTO news (title, content, created_by) VALUES (:title, :content, :created_by)");
@@ -55,9 +49,7 @@ class News
         ]);
     }
 
-    /**
-     * Update an existing news article.
-     */
+    // Update the title or content of an existing post
     public function update(int $id, string $title, string $content): bool
     {
         $stmt = $this->db->prepare("UPDATE news SET title = :title, content = :content WHERE id = :id");
@@ -68,18 +60,14 @@ class News
         ]);
     }
 
-    /**
-     * Delete a news article by ID.
-     */
+    // Delete an announcement
     public function delete(int $id): bool
     {
         $stmt = $this->db->prepare("DELETE FROM news WHERE id = :id");
         return $stmt->execute([':id' => $id]);
     }
 
-    /**
-     * Count total news articles.
-     */
+    // Just counts how many total news posts exist in the DB
     public function count(): int
     {
         $stmt = $this->db->query("SELECT COUNT(id) FROM news");

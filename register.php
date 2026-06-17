@@ -27,11 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Name must be at least 2 characters and password at least 6 characters.";
         } else {
             $user = new User();
-            // Students only — admin accounts are created by seed or by admins
-            if ($user->register($name, $email, $password, 'student')) {
+            try {
+                // Students only — admin accounts are created by seed or by admins
+                $user->register($name, $email, $password, 'student');
                 $success = "Registration successful! You can now login.";
-            } else {
-                $error = "Registration failed. Email might already exist or is invalid.";
+            } catch (Exception $e) {
+                $error = $e->getMessage();
             }
         }
     }

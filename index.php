@@ -1,9 +1,10 @@
 <?php
-// Entry point / Login
+// Main entry point for the portal - basically just the login page
 require_once __DIR__ . '/config/app.php';
 require_once __DIR__ . '/classes/User.php';
 
-// If already logged in, redirect to dashboard
+// If they are already logged in, no need to show the login form again. 
+// Just send them straight to their respective dashboard based on their role.
 if (isset($_SESSION['user_id'])) {
     if ($_SESSION['user_role'] === 'admin') {
         redirect('views/admin_dashboard.php');
@@ -22,9 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = $_POST['password'] ?? '';
 
         $userCore = new User();
-        $user = $userCore->login($email, $password);
+        try { 
+            $user = $userCore->login($email, $password);
+            
+            // Regenerate session ID to prevent Session Fixation
+            session_regenerate_id(true);
 
-        if ($user) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_role'] = $user['role'];
@@ -33,45 +37,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 redirect('views/student_dashboard.php');
             }
-        } else {
-            $error = "Invalid email or password.";
+        } catch (Exception $e) {
+            $error = $e->getMessage();
         }
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login — University Portal</title>
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/css/style.css">
 </head>
+
 <body>
     <div class="auth-wrapper">
         <div class="auth-card">
             <div class="logo-block" style="text-align: center; margin-bottom: 30px;">
-                <img src="<?php echo BASE_URL; ?>/assets/images/IT_logo.png" alt="BATU IT Department" style="height: 80px; margin-bottom: 15px;">
+                <img src="<?php echo BASE_URL; ?>/assets/images/IT_logo.png" alt="BATU IT Department"
+                    style="height: 80px; margin-bottom: 15px;">
                 <h1 style="font-size: 1.8rem; margin-bottom: 5px;">BATU | IT Portal</h1>
                 <p style="color: #666;">Sign in to access courses & news</p>
             </div>
             <?php if ($error): ?>
-                <div class="alert alert-danger">⚠️ <?php echo User::e($error); ?></div>
+            <div class="alert alert-danger">⚠️ <?php echo User::e($error); ?></div>
             <?php endif; ?>
 
             <form method="POST" action="index.php">
                 <input type="hidden" name="csrf_token" value="<?php echo User::e($_SESSION['csrf_token']); ?>">
-                
+
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="you@university.edu" required>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="you@university.edu"
+                        required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                    <input type="password" id="password" name="password" class="form-control"
+                        placeholder="Enter your password" required>
                 </div>
-                
+
                 <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
             </form>
 
@@ -81,4 +90,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </body>
+
 </html>

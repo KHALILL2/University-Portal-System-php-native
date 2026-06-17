@@ -1,28 +1,28 @@
 <?php
 declare(strict_types=1);
 
+// Using the Singleton pattern here so we don't open 100 database connections at once
 class Database
 {
     private static ?Database $instance = null;
     private ?PDO $connection = null;
 
-    private string $host = '127.0.0.1';
-    private string $dbName = 'university_portal';
-    private string $username = 'root';
-    private string $password = '';
-    private string $charset = 'utf8mb4';
-
+    // The constructor is private so no one can just type "new Database()"
     private function __construct()
     {
-        $dsn = "mysql:host={$this->host};dbname={$this->dbName};charset={$this->charset}";
+        // Pull in the database credentials (make sure env.php isn't pushed to GitHub!)
+        require_once __DIR__ . '/env.php';
+         
+        $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
 
-        $this->connection = new PDO($dsn, $this->username, $this->password, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
+        $this->connection = new PDO($dsn, DB_USER, DB_PASS, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Throw exceptions on errors
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // Always return associative arrays
+            PDO::ATTR_EMULATE_PREPARES => false, // Let MySQL handle the prepared statements (more secure)
         ]);
     }
 
+    // This is how we actually get the single database instance
     public static function getInstance(): Database
     {
         if (self::$instance === null) {
@@ -32,6 +32,7 @@ class Database
         return self::$instance;
     }
 
+    // Grabs the actual PDO connection object
     public function getConnection(): PDO
     {
         if ($this->connection === null) {
@@ -41,6 +42,7 @@ class Database
         return $this->connection;
     }
 
+    // Prevent cloning and unserializing to keep the Singleton pattern strict
     private function __clone(): void
     {
     }

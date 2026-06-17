@@ -46,12 +46,13 @@ $userName = $_SESSION['user_name'] ?? '';
                     <a href="<?php echo BASE_URL; ?>/views/admin/manage_users.php"><i class="fas fa-users"></i> Users</a>
                 <?php else: ?>
                     <a href="<?php echo BASE_URL; ?>/views/student_dashboard.php"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    <a href="<?php echo BASE_URL; ?>/views/student/view_departments.php"><i class="fas fa-university"></i> Departments</a>
                     <a href="<?php echo BASE_URL; ?>/views/student/browse_courses.php"><i class="fas fa-book"></i> Courses</a>
                     <a href="<?php echo BASE_URL; ?>/views/student/view_news.php"><i class="fas fa-newspaper"></i> News</a>
                     <a href="<?php echo BASE_URL; ?>/views/student_profile.php"><i class="fas fa-user"></i> Profile</a>
                 <?php endif; ?>
                 <a href="<?php echo BASE_URL; ?>/views/search.php"><i class="fas fa-search"></i> Search</a>
-                <a href="<?php echo BASE_URL; ?>/logout.php" class="nav-logout"><i class="fas fa-sign-out-alt"></i> Logout (<?php echo User::e($userName); ?>)</a>
+                <a href="<?php echo BASE_URL; ?>/logout.php?token=<?php echo User::e($_SESSION['csrf_token']); ?>" class="nav-logout"><i class="fas fa-sign-out-alt"></i> Logout (<?php echo User::e($userName); ?>)</a>
             <?php else: ?>
                 <a href="<?php echo BASE_URL; ?>/index.php">Login</a>
                 <a href="<?php echo BASE_URL; ?>/register.php">Register</a>

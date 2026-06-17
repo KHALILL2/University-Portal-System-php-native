@@ -24,13 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($password !== '' && strlen($password) < 6) {
             $error = "New password must be at least 6 characters long.";
         } else {
-            if ($student->updateProfile($userId, $name, $email, $password)) {
+            try {
+                $student->updateProfile($userId, $name, $email, $password);
                 $success = "Profile updated successfully!";
                 $_SESSION['user_name'] = $name;
                 $currentUser['name'] = $name;
                 $currentUser['email'] = $email;
-            } else {
-                $error = "Update failed. Ensure the email is valid and not already in use.";
+            } catch (Exception $e) {
+                $error = $e->getMessage();
             }
         }
     }

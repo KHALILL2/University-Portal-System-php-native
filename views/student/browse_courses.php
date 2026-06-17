@@ -1,14 +1,10 @@
 <?php
 $pageTitle = 'Browse Courses';
 require_once __DIR__ . '/../../includes/auth_middleware.php';
-require_once __DIR__ . '/../../classes/Course.php';
-require_once __DIR__ . '/../../classes/Department.php';
-require_once __DIR__ . '/../../classes/Enrollment.php';
+require_once __DIR__ . '/../../classes/Student.php';
 requireRole('student');
 
-$courseModel = new Course();
-$deptModel = new Department();
-$enrollmentModel = new Enrollment();
+$student = new Student();
 $userId = (int)$_SESSION['user_id'];
 
 $error = '';
@@ -22,13 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $courseId = (int)($_POST['course_id'] ?? 0);
         $action = $_POST['action'] ?? '';
         if ($action === 'enroll' && $courseId > 0) {
-            if ($enrollmentModel->enroll($userId, $courseId)) {
+            if ($student->enrollInCourse($userId, $courseId)) {
                 $success = "Successfully enrolled!";
             } else {
                 $error = "Already enrolled in this course.";
             }
         } elseif ($action === 'unenroll' && $courseId > 0) {
-            if ($enrollmentModel->unenroll($userId, $courseId)) {
+            if ($student->unenrollFromCourse($userId, $courseId)) {
                 $success = "Successfully unenrolled.";
             } else {
                 $error = "Failed to unenroll.";
@@ -39,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Filter by department
 $filterDept = (int)($_GET['department'] ?? 0);
-$courses = ($filterDept > 0) ? $courseModel->getByDepartment($filterDept) : $courseModel->getAll();
-$departments = $deptModel->getAll();
+$courses = $student->viewCourses($filterDept);
+$departments = $student->viewDepartments();
 
 require_once __DIR__ . '/../../includes/header.php';
 ?>
@@ -97,7 +93,7 @@ require_once __DIR__ . '/../../includes/header.php';
                     <tr><td colspan="5" class="table-empty">No courses found.</td></tr>
                 <?php else: ?>
                     <?php foreach ($courses as $c): ?>
-                    <?php $enrolled = $enrollmentModel->isEnrolled($userId, (int)$c['id']); ?>
+                    <?php $enrolled = $student->isEnrolled($userId, (int)$c['id']); ?>
                     <tr>
                         <td><span class="badge badge-student"><?php echo User::e($c['code']); ?></span></td>
                         <td><strong><?php echo User::e($c['name']); ?></strong></td>

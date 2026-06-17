@@ -12,9 +12,7 @@ class Course
         $this->db = Database::getInstance()->getConnection();
     }
 
-    /**
-     * Retrieve all courses with their department name.
-     */
+    // Get all courses and also pull in the department name so we don't just show an ID
     public function getAll(): array
     {
         $stmt = $this->db->query("
@@ -26,9 +24,7 @@ class Course
         return $stmt->fetchAll();
     }
 
-    /**
-     * Retrieve courses filtered by department.
-     */
+    // Used when a student clicks on a specific department category
     public function getByDepartment(int $departmentId): array
     {
         $stmt = $this->db->prepare("
@@ -42,9 +38,7 @@ class Course
         return $stmt->fetchAll();
     }
 
-    /**
-     * Retrieve a single course by ID.
-     */
+    // Grab a single course. Useful for the edit page.
     public function getById(int $id): ?array
     {
         $stmt = $this->db->prepare("
@@ -58,9 +52,7 @@ class Course
         return $row ?: null;
     }
 
-    /**
-     * Create a new course.
-     */
+    // Add a new course. We uppercase the code just to keep things consistent (e.g. cs101 -> CS101)
     public function create(string $name, string $code, string $description, int $departmentId): bool
     {
         $stmt = $this->db->prepare("INSERT INTO courses (name, code, description, department_id) VALUES (:name, :code, :desc, :did)");
@@ -72,9 +64,7 @@ class Course
         ]);
     }
 
-    /**
-     * Update an existing course.
-     */
+    // Save changes to an existing course
     public function update(int $id, string $name, string $code, string $description, int $departmentId): bool
     {
         $stmt = $this->db->prepare("UPDATE courses SET name = :name, code = :code, description = :desc, department_id = :did WHERE id = :id");
@@ -87,18 +77,14 @@ class Course
         ]);
     }
 
-    /**
-     * Delete a course by ID.
-     */
+    // Delete a course. Warning: this will probably cascade and delete enrollments too depending on the DB setup
     public function delete(int $id): bool
     {
         $stmt = $this->db->prepare("DELETE FROM courses WHERE id = :id");
         return $stmt->execute([':id' => $id]);
     }
 
-    /**
-     * Search courses by name or code.
-     */
+    // Search function for the top bar. Looks through both names and codes.
     public function search(string $keyword): array
     {
         $term = '%' . $keyword . '%';

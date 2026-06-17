@@ -12,18 +12,14 @@ class Department
         $this->db = Database::getInstance()->getConnection();
     }
 
-    /**
-     * Retrieve all departments ordered by name.
-     */
+    // Just grabs everything in alphabetical order
     public function getAll(): array
     {
         $stmt = $this->db->query("SELECT * FROM departments ORDER BY name ASC");
         return $stmt->fetchAll();
     }
 
-    /**
-     * Retrieve a single department by its ID.
-     */
+    // Finds a single dept by ID. Returns null if it doesn't exist anymore
     public function getById(int $id): ?array
     {
         $stmt = $this->db->prepare("SELECT * FROM departments WHERE id = :id LIMIT 1");
@@ -32,9 +28,7 @@ class Department
         return $row ?: null;
     }
 
-    /**
-     * Create a new department.
-     */
+    // Add a new department to the system
     public function create(string $name, string $description): bool
     {
         $stmt = $this->db->prepare("INSERT INTO departments (name, description) VALUES (:name, :description)");
@@ -44,9 +38,7 @@ class Department
         ]);
     }
 
-    /**
-     * Update an existing department.
-     */
+    // Save edits to a department
     public function update(int $id, string $name, string $description): bool
     {
         $stmt = $this->db->prepare("UPDATE departments SET name = :name, description = :description WHERE id = :id");
@@ -57,18 +49,14 @@ class Department
         ]);
     }
 
-    /**
-     * Delete a department by ID (cascades to courses).
-     */
+    // Nuke a department. (Be careful, this will delete all courses attached to it if ON DELETE CASCADE is on!)
     public function delete(int $id): bool
     {
         $stmt = $this->db->prepare("DELETE FROM departments WHERE id = :id");
         return $stmt->execute([':id' => $id]);
     }
 
-    /**
-     * Count courses belonging to a department.
-     */
+    // Helper to see how many courses a department currently has
     public function getCourseCount(int $departmentId): int
     {
         $stmt = $this->db->prepare("SELECT COUNT(id) FROM courses WHERE department_id = :did");
@@ -76,9 +64,7 @@ class Department
         return (int) $stmt->fetchColumn();
     }
 
-    /**
-     * Search departments by keyword.
-     */
+    // Search bar logic for departments
     public function search(string $keyword): array
     {
         $term = '%' . $keyword . '%';

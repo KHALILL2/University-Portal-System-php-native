@@ -7,15 +7,10 @@ require_once __DIR__ . '/Course.php';
 require_once __DIR__ . '/News.php';
 require_once __DIR__ . '/Enrollment.php';
 
-/**
- * Admin extends User — demonstrates Inheritance.
- * Provides dashboard statistics and delegates CRUD to entity classes.
- */
+// Admin inherits from User since they share login/profile features
 class Admin extends User
 {
-    /**
-     * Gather all dashboard statistics.
-     */
+    // Grab all the numbers we need for the dashboard widgets
     public function getDashboardStats(): array
     {
         $stats = [
@@ -26,45 +21,41 @@ class Admin extends User
             'recent_enrollments' => [],
         ];
 
-        // Total users
+        // Count total users
         $stmt = $this->db->query("SELECT COUNT(id) FROM users");
         $stats['total_users'] = (int) $stmt->fetchColumn();
 
-        // Total departments
+        // Count departments
         $stmt = $this->db->query("SELECT COUNT(id) FROM departments");
         $stats['total_departments'] = (int) $stmt->fetchColumn();
 
-        // Total courses
+        // Count courses
         $stmt = $this->db->query("SELECT COUNT(id) FROM courses");
         $stats['total_courses'] = (int) $stmt->fetchColumn();
 
-        // Total enrollments
+        // Count enrollments
         $stmt = $this->db->query("SELECT COUNT(id) FROM enrollments");
         $stats['total_enrollments'] = (int) $stmt->fetchColumn();
 
-        // Recent enrollments (last 5)
+        // Get the latest 5 enrollments to show in the table
         $enrollment = new Enrollment();
         $stats['recent_enrollments'] = $enrollment->getRecent(5);
 
         return $stats;
     }
 
-    /**
-     * Get all users for user management.
-     */
+    // Used in the manage users page to list everyone out
     public function getAllUsers(): array
     {
         $stmt = $this->db->query("SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC");
         return $stmt->fetchAll();
     }
 
-    /**
-     * Delete a user by ID (cannot delete self).
-     */
+    // Deletes a user, but we need to make sure the admin doesn't accidentally delete themselves
     public function deleteUser(int $id, int $currentAdminId): bool
     {
         if ($id === $currentAdminId) {
-            return false; // Prevent self-deletion
+            return false; // Stop self-deletion
         }
         $stmt = $this->db->prepare("DELETE FROM users WHERE id = :id");
         return $stmt->execute([':id' => $id]);
